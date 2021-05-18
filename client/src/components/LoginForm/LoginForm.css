@@ -1,0 +1,70 @@
+
+html, body, #root {
+  height: 100%;
+  margin: 0px;
+  min-width: 100%;
+}
+
+.loginForm {
+  background-image: url(../../assets/watercolor.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* height: 950px; */
+  /* display: flex;
+  justify-content: right;
+  flex-direction: column; */
+  padding-top: 200px;
+  height: 100vh;
+  min-height: 100vh;
+  padding-left: 25px;
+  padding-right: 25px;
+  border: 2px solid #000;
+}
+
+
+/* INPUTS */
+  input[type=email],
+  input[type=password] {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: content-box; 
+  }
+
+
+  input[type=email] {
+    margin-bottom: 45px;
+  }
+  
+  .btn-submit:hover  {
+    opacity: 0.8;
+  }
+  
+  .loginText {
+    cursor: pointer;
+  }
+  
+  .loginText:hover {
+    text-decoration: underline;
+    font-style: bolder;
+  
+    }
+
+/* Tablet, Mobile Landscape */
+@media (min-width: 481px) and (max-width: 992px) {
+  
+  .loginForm {
+    padding-top: 75px;
+  }
+
+}
+
+
+/* Mobile */
+@media (min-width: 320px) and (max-width: 480px) {
+  
+  .loginForm {
+  padding-top: 35px;
+  min-height: 100%;
+  }
+}

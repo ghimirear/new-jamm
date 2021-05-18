@@ -1,0 +1,115 @@
+/* font-family: 'Caveat', cursive;
+font-family: 'Open Sans', sans-serif;
+font-family: 'Seaweed Script', cursive; */
+/* font-family: 'Lato', sans-serif; */
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lato:wght@400;700&display=swap');
+
+.card-title-journal {
+    font-size: 1.75rem;
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
+    text-transform: uppercase;
+}
+
+.card-text-journal a,
+.card-text-journal,
+.card-title-journal {
+    font-size: 1rem;
+    color: #000;
+    font-weight: bold;
+}
+
+hr {
+  margin: 0;
+}
+
+.create-journal {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.card-journal {
+    background: #161616;
+    border-radius: 2px;
+    margin: 1rem;
+    margin-bottom: 40px;
+    width: 500px;
+    height: 500px;
+    text-align: left;
+  }
+
+ 
+  .card-journal > .card-body-journal {
+    background-color: #fefefa;
+    background-image: url(../assets/large-leather.png);
+    position: relative;
+    z-index: 2; 
+  }
+
+    .vl {
+      border-left: 35px solid #161616;;
+      height: 500px;
+    }
+
+  .journal-input {
+      height: 50px;
+  }
+
+  .card-content-journal {
+    padding-top: .75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: .75;
+    width: 285px;
+    border-radius: 5%;
+    height: 175px;
+    line-height: 1;;
+    border: 3px solid #161616;
+    background-color: #fff9f6;
+  }
+  
+
+.fa, .fas {
+  font-size: 18px;
+  color: grey;
+}
+
+.fa-plus {
+  font-size: 1.75rem;
+  color: #fefefa;
+}
+
+.fa:hover,
+.fas:hover {
+    color: black;
+}
+
+.fa-file-alt {
+  margin-right: 19px;
+}
+.fa-edit {
+    margin-right: 8px;
+}
+
+
+.messageJournals {
+ 
+    background: #000;
+    padding: 35px;
+    margin-top: 100px;
+        
+      
+    
+}
+
+.jotJournals {
+  font-family: 'Caveat', cursive;
+  font-size: 6rem;
+  font-weight: bold;
+  
+}
+
+

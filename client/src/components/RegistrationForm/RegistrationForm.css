@@ -1,0 +1,82 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+.registration-form {
+  background-image: url(../../assets/watercolor.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;  
+  height: 950px;
+  padding-top: 80px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border: 4px solid #000;
+}
+
+
+/* INPUTS */
+input[type=firstName],
+input[type=lastName]{
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: content-box; 
+  }
+
+  .btn-submit:hover {
+  opacity: 0.8;
+}
+
+/* .regis-password {
+  margin-top: 2rem;
+} */
+
+.loginText {
+  cursor: pointer;
+}
+
+.loginText:hover {
+ text-decoration: underline;
+ font-style: bolder;
+}
+
+.register-button{
+  width: 220px;
+  height: 50px;
+  align-self: center;   
+}
+
+/* .mt-2{
+  font-size: 30px;
+  }  */
+
+
+/* Tablet, Mobile Landscape */
+@media (min-width: 481px) and (max-width: 767px) {
+  
+  .loginForm {
+    padding-top: 35px;
+    height: 100%;
+  }
+}
+
+
+/* Mobile */
+@media (min-width: 320px) and (max-width: 480px) {
+  
+  .loginForm {
+    padding-top: 35px;
+    height: 100%;
+  
+  }
+}
+
+
+
+
+
+
+
+
+
