@@ -1,101 +1,36 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import apiConstant from "../constants/apiContants.js";
 // import Table from '../components/Table/table';
 import "./allpages.css";
 
 function AllEntries(props) {
-  const [state, setState] = useState({
-    journalId: '',
-    userId: '',
-    token: '',
-    results: []
-  });
+  const [results, setResults]= useState([])
   const { id } = useParams();
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    setState((prevState) => ({
-      ...prevState,
-      userId: user.id,
-      token: user.token,
-      name: user.name,
-      journalId: id
-    }));
-    const apiUrl = '/article/';
-    const authAxios = axios.create({
-      baseURL: apiUrl,
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        userId: user.id
-      }
-    });
-    authAxios
-      .get(`get/${id}`)
-      .then((result) => {
-        console.log(result.data.articles);
-        if (result.data.articles) {
-          setState((prevState) => ({
-            ...prevState,
-            results: result.data.articles
-          }));
-        }
-      })
-      .catch((error) => console.log(error));
-    props.fn()
-  }, []);
+    getEntries();
+    //props.fn()
+  }, [results]);
   const getEntries = () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    setState((prevState) => ({
-      ...prevState,
-      userId: user.id,
-      token: user.token,
-      name: user.name,
-      journalId: id
-    }));
-    const apiUrl = '/article/';
-    const authAxios = axios.create({
-      baseURL: apiUrl,
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        userId: user.id
-      }
-    });
-    authAxios
-      .get(`get/${id}`)
-      .then((result) => {
-        console.log(result.data.articles);
-        if (result.data.articles) {
-          setState((prevState) => ({
-            ...prevState,
-            results: result.data.articles
-          }));
-        }
-      })
-      .catch((error) => console.log(error));
+    apiConstant.getArticle(id).then((res)=>{
+      setResults(res.data.articles)
+    }).catch(error=> console.log(error))
   };
   const deleteEntry = (e) => {
     const delid = e.target.getAttribute('id');
     console.log(delid);
-    const apiUrl = '/article/';
-    const authAxios = axios.create({
-      baseURL: apiUrl,
-      headers: {
-        Authorization: `Bearer ${state.token} `,
-        userId: state.userId,
-        journalId: id
-      }
-    });
-    authAxios.delete(`delete/${delid}`).then((res) => console.log(res)).catch((error) => console.log(error));
-    getEntries();
+    apiConstant.deleteArticle(delid).then(res=>console.log(res),
+    getEntries()
+    ).catch(error => console.log(error))
   };
   //Render
   return (
     <div>
-      {state.results.length ? (
+      {results.length ? (
         <div className="container container-entries ">
           <div className="row d-flex justify-content-center  ">
             <div className="col-sm-8 ">
-              {state.results.map((result) => (
+              {results.map((result) => (
                 <div className="entries text-left "
                   style={{ margin: '.5rem', fontStyle: "bold" }}>
                   <button

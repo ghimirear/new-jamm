@@ -13,8 +13,8 @@ const bcrypt = require('bcrypt');
         if(!existingUser)return res.status(404).json({message:"user doesnot exists."});
         const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
         if(!isPasswordCorrect)return res.status(400).json({message: "invalid email or password"});
-        const token = jwt.sign({email: existingUser.email, id:existingUser._id}, "test", {expiresIn: "1h"});
-        res.status(200).json({result: existingUser, token});
+        const token = jwt.sign({email: existingUser.email, id:existingUser._id}, "test", {expiresIn: "2h"});
+        res.status(200).json({ token:token});
         // res.cookie('jwt', token, {httpOnly:true,secure: true, maxAge: 1000*60*60}) may be work for cookie
     }catch (error){
         res.status(500).json({message: "something went wrong"});
@@ -33,11 +33,17 @@ try{
     const result = await User.create({
      email:email, password:hashedPassword, firstName:firstName, lastName:lastName 
     })
-    const token = jwt.sign({email: result.email, id:result._id}, "test", {expiresIn: "1h"});
-    res.status(200).json({result:result, token})
+    const token = jwt.sign({email: result.email, id:result._id}, "test", {expiresIn: "2h"});
+    res.status(200).json({ token:token})
 }
 catch(error){
     res.status(500).json({message: "something went wrong"});
 }
 }
- module.exports={signup, signin}
+const updateUser = async (req, res)=>{
+    const theme = req.body.theme;
+ await User.findOneAndUpdate({_id:req.body.userId}, theme)
+    .then(Dbuser=> res.json(Dbuser.theme))
+    .catch(error => res.json(error));
+}
+ module.exports={signup, signin, updateUser}

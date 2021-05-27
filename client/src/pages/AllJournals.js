@@ -1,149 +1,56 @@
-import axios from "axios";
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "../components/Wrapper/wrapper";
-
+import apiConstant from "../constants/apiContants.js";
 import { Link } from "react-router-dom";
-import "./alljournals.css";
+import "./alljournals.css"; 
 import "./allpages.css";
 
-class AllJournals extends Component {
-  state = {
-    userId: "",
-    token: "",
-    journalId: "",
-    name: "",
-    results: [],
-    journalName: "",
-  };
+function AllJournals(props) {
+ const [journals, setJournals]= useState([])
+   const [formObject, setFormObject]= useState({})
   // function to delete journal
-  deleteJournal = (e) => {
-    console.log(e.target)
+  props.fn()
+  function deleteJournal(e){
+    // console.log(e.target)
     const delid = e.target.getAttribute('id');
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      this.setState({
-        userId: user.id,
-        token: user.token,
-        name: user.name,
-      });
-      console.log(delid);
-      const apiUrl = "/user/"
-      const authAxios = axios.create({
-        baseURL: apiUrl,
-        headers: {
-          Authorization: `Bearer ${this.state.token} `,
-          userId: this.state.userId,
-        }
-      })
-      authAxios.delete(`journal/${delid}`)
-        .then(res => console.log(res),
-          this.getJournal()
-        )
-        .catch(error => console.log(error));
-
-    }
+     apiConstant.deleteJournal(delid).then((res)=>{
+       console.log(res);
+       getJournal()
+     }).catch(err=> console.log(err))
   }
   // on page load.
-  componentDidMount() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      this.setState({
-        userId: user.id,
-        token: user.token,
-        name: user.name,
-      });
-      console.log(user);
-      // creating header
-      const apiUrl = "/user/";
-      const authAxios = axios.create({
-        baseURL: apiUrl,
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          userId: user.id,
-        },
-      });
-      authAxios.get(`journal/${user.id}`)
-        .then((result) => {
-          console.log(result.data);
-          this.setState({
-            results: result.data,
-          });
-        });
-    }
-    this.props.fn()
-
-  }
+  useEffect(() => {
+    getJournal()
+    
+  }, [journals]) 
   // handing input change
-  handleChange = (e) => {
+ function handleChange(e){
     const { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
+    setFormObject({...formObject, [name]:value})
   };
-  clearInput = () => {
-    this.setState({
-      journalName: "",
-    });
+ function  clearInput ()  {
+    setFormObject( { ...formObject, journalName:""})
   };
   // function to get journal
-  getJournal = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      this.setState({
-        userId: user.id,
-        token: user.token,
-        name: user.name,
-      });
-      console.log(user);
-      // creating header
-      const apiUrl = "/user/";
-      const authAxios = axios.create({
-        baseURL: apiUrl,
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          userId: user.id,
-        },
-      });
-      authAxios.get(`journal/${user.id}`).then((result) => {
-        console.log(result.data);
-        this.setState({
-          results: result.data,
-        });
-      });
-    }
+ function  getJournal(){
+    apiConstant.getJournal().then((res)=>{
+      setJournals(res.data)
+    })
   };
   // function to create new journal
-  addJournal = (e) => {
+ function addJournal (e){
     e.preventDefault();
-    if (this.state.journalName === "") return
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const apiUrl = "/user/";
-      const authAxios = axios.create({
-        baseURL: apiUrl,
-        headers: {
-          Authorization: `Bearer ${user.token} `,
-          userId: user.id,
-        },
-      });
-      if (this.state.journalName === "") return
-      authAxios
-        .post("journal", this.state)
-        .then((res) => {
-          console.log(res)
-          if (res.status === 200) {
-            this.getJournal()
-          }
-        }
-
-        )
-        .catch((error) => console.log(error));
-    }
-
-    this.clearInput();
+    if(formObject.journalName){
+    apiConstant.createJournal({journalName:formObject.journalName})
+    .then((res)=>{
+    getJournal();
+    }).catch(err=>{
+      console.log(err);
+    })
+    clearInput();}
   };
 
-  render() {
+  
     return (
       <Wrapper>
         <div className="container">
@@ -158,8 +65,7 @@ class AllJournals extends Component {
             </div>
             <input
               required
-              onChange={this.handleChange}
-              value={this.state.journalName}
+              onChange={handleChange}
               type="text"
               className="form-control input-group-lg"
               placeholder="Journal Name"
@@ -173,7 +79,7 @@ class AllJournals extends Component {
                 className="btn btn-dark text-light search-button text-capitalize"
                 id="button-addon2"
                 type="submit"
-                onClick={this.addJournal}
+                onClick={addJournal}
               >
                 <i class="fas fa-plus"></i>
               </button>
@@ -182,9 +88,9 @@ class AllJournals extends Component {
           {/* </form> */}
         </div>
 
-        {this.state.results.length ? (
+        {journals.length ? (
           <div className="container-fluid card-container d-flex flex-wrap justify-content-center">
-            {this.state.results.map((result) => (
+            {journals.map((result) => (
               <div className="card card-journal border-0">
                 {/* <CardJournal> */}
                 <div className="card-body vl card-body-journal d-flex flex-wrap justify-content-center align-items-center">
@@ -205,7 +111,7 @@ class AllJournals extends Component {
                         <Link to={"/create/" + result._id}>
                           <a
                             className="text-capitalize text-center"
-                            onClick={this.createEntry}
+                            
                             id={result._id}
                           >
                             <span>
@@ -222,7 +128,7 @@ class AllJournals extends Component {
                       <button
                         type="button"
                         className="btn btn-sm d-inline-block "
-                        onClick={this.deleteJournal}
+                        onClick={deleteJournal}
                         id={result._id}
                       >
                         <i
@@ -247,6 +153,6 @@ class AllJournals extends Component {
         {/* <Footer /> */}
       </Wrapper>
     );
-  }
+  
 }
 export default AllJournals;

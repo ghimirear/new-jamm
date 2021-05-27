@@ -3,55 +3,33 @@ import { useParams } from "react-router-dom";
 import { Row } from "../components/Grid/grid";
 import Wrapper from "../components/Wrapper";
 import "./createentry.css";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import apiContants from "../constants/apiContants.js";
 
 let today = new Date().toDateString();
 
 function CreateEntry() {
-    const [state, setState] = useState({
-        journalId: "",
-        title: "",
-        body: "",
-        userId: "",
-        token: "",
-        name: "",
-    });
+    const [formObject, setFormObject] = useState({});
     const { id } = useParams();
     const handleChange = (e) => {
-        const user = JSON.parse(localStorage.getItem("user"));
         const { name, value } = e.target;
-        setState((prevState) => ({
-            ...prevState,
-            [name]: value,
-            journalId: id,
-            userId: user.id,
-            token: user.token,
-            name: user.name,
-        }));
-    };
-    const clearInput = () => {
-        setState({
-            title: "",
-            body: "",
-        });
-    };
+        setFormObject({...formObject, [name]:value})
+    }
     const addArticle = (e) => {
         e.preventDefault();
-        if (state.journalId === "" || state.userId === "") return;
-        const apiUrl = "/article/";
-        const authAxios = axios.create({
-            baseURL: apiUrl,
-            headers: {
-                Authorization: `Bearer ${state.token} `,
-                userId: state.userId,
-            },
-        });
-        authAxios
-            .post("create", state)
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
-        clearInput();
+        if (formObject.title === undefined || formObject.body === undefined ) {
+            console.log("undefined");
+            return
+        }
+        console.log(formObject.title);
+      const article =  {
+        title:formObject.title, 
+        body:formObject.body, 
+        journalId:id
+    }
+       apiContants.createArticle(article)
+       .then(res=> console.log(res),
+       ).catch(error => console.log(error))
     };
  
     return (
@@ -90,7 +68,6 @@ function CreateEntry() {
                                     placeholder="Title"
                                     name="title"
                                     id="title"
-                                    value={state.title}
                                 ></input>
                             </div>
 
@@ -112,8 +89,8 @@ function CreateEntry() {
                                     placeholder="Write it all down"
                                     name="body"
                                     id="body"
+                                    
                                     rows="15"
-                                    value={state.body}
                                 ></textarea>
                             </div>
                         </form>

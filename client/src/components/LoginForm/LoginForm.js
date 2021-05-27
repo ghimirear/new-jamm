@@ -10,6 +10,7 @@ function LoginForm(props) {
     email: "",
     password: "",
     successMessage: null,
+    errorMessage: null,
   });
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -31,10 +32,8 @@ function LoginForm(props) {
         if (response.status === 200) {
           const user = {
             token: response.data.token,
-            id: response.data.result._id,
-            name: response.data.result.firstName,
           };
-          localStorage.setItem("user", JSON.stringify(user));
+          sessionStorage.setItem("user", JSON.stringify(user));
           setState((prevState) => ({
             ...prevState,
             successMessage: "Login successful. Redirecting to home page..",
@@ -42,13 +41,18 @@ function LoginForm(props) {
           redirectToHome();
           props.showError(null);
         } else if (response.status === 400) {
-          props.showError("Username or password do not match");
+          console.log("bad request");
+          setState("Email or password do not match");
         } else {
-          props.showError("this email is not registered");
+          setState("this email is not registered");
         }
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error)
+        setState((prevState) => ({
+          ...prevState,
+          errorMessage: "This email ios not registered. Please register", 
+        }));
       });
   };
   const redirectToHome = () => {
@@ -115,12 +119,18 @@ function LoginForm(props) {
                 role="alert">
                 {state.successMessage}
               </div>
+              <div
+                className="alert alert-danger mt-2"
+                style={{ display: state.errorMessage ? "block" : "none" }}
+                role="alert">
+                {state.errorMessage}
+              </div>
               <div className="registerMessage" style={{ marginTop: "35px" }}>
                 <span>Don't have an account? </span>
                 <span className="loginText"
 
                   onClick={() => redirectToRegister()}>
-                  Register HERE</span>
+                 <a href="/register" style={{textDecoration:"underline"}}>Register here</a> </span>
               </div>
             </div>
           </form>

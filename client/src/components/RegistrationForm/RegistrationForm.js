@@ -12,6 +12,7 @@ function RegistrationForm(props) {
     password: "",
     confirmPassword: "",
     successMessage: null,
+    errorMessage: null,
     firstName: "",
     lastName: "",
   });
@@ -23,7 +24,36 @@ function RegistrationForm(props) {
     }));
   };
   const sendDetailsToServer = () => {
-    if (state.email.length && state.password.length) {
+    if (state.password.length < 8 || state.confirmPassword.length < 8) {
+      setState((prevState) => ({
+        ...prevState,
+        errorMessage:
+          "password must be 8 character or more",
+          
+      }));
+      return;
+    }
+    if (!!state.email.includes("/^[^\s@]+@[^\s@]+$/")) {
+      setState((prevState) => ({
+        ...prevState,
+        errorMessage:
+          "invalid email",
+          
+      }));
+      return;
+    }
+    if (state.firstName==="" || state.lastName==="") {
+      setState((prevState) => ({
+        ...prevState,
+        errorMessage:
+          "name is required",
+          
+      }));
+      return;
+    }
+
+
+     if (state.email.length && state.password.length > 8 && state.password === state.confirmPassword) {
       props.showError(null);
       const payload = {
         firstName: state.firstName,
@@ -39,10 +69,9 @@ function RegistrationForm(props) {
           if (response.status === 200) {
             const user = {
               token: response.data.token,
-              id: response.data.result._id,
-              name: response.data.result.firstName,
+
             };
-            localStorage.setItem("user", JSON.stringify(user));
+            sessionStorage.setItem("user", JSON.stringify(user));
             setState((prevState) => ({
               ...prevState,
               successMessage:
@@ -51,14 +80,33 @@ function RegistrationForm(props) {
             redirectToHome();
             props.showError(null);
           } else if (response.status === 400) {
-            props.showError("this email is already register");
+            setState((prevState) => ({
+              ...prevState,
+              errorMessage:
+                "This email is already registered",
+            }));
+          }
+          else if(response.status===404){
+            setState((prevState) => ({
+              ...prevState,
+              errorMessage:
+                "you are not registered.",
+            }));
           }
         })
         .catch(function (error) {
-          console.log(error);
+          setState((prevState) => ({
+            ...prevState,
+            errorMessage:
+              "this email is already registered!!",
+          }));
         });
     } else {
-      props.showError("Please enter valid username and password");
+      setState((prevState) => ({
+        ...prevState,
+        errorMessage:
+          "this email is already registered!!",
+      }));
     }
   };
   const redirectToHome = () => {
@@ -73,8 +121,13 @@ function RegistrationForm(props) {
     e.preventDefault();
     if (state.password === state.confirmPassword) {
       sendDetailsToServer();
-    } else {
+    } else if(!!state.email.includes("/\S+@\S+\.\S+/")){
+      props.showError("please enter a valid email")
+      return;
+    }
+     else {
       props.showError("Passwords do not match");
+      
     }
   };
   return (
@@ -97,6 +150,7 @@ function RegistrationForm(props) {
                   className="form-control"
                   id="firstName"
                   placeholder="First Name"
+                  required={true}
                   value={state.firstName}
                   onChange={handleChange}
                 />
@@ -109,6 +163,7 @@ function RegistrationForm(props) {
                   className="form-control"
                   id="lastName"
                   placeholder="Last Name"
+                  required
                   value={state.lastName}
                   onChange={handleChange}
                 />
@@ -161,15 +216,21 @@ function RegistrationForm(props) {
               <div>
                 <span>Already have an account? </span>
                 <span className="loginText" onClick={() => redirectToLogin()}>
-                  Login HERE
+                  <a href="/login" style={{textDecoration:"underline"}}>Login here</a> 
               </span>
               </div>
 
               <div
                 className="alert alert-success "
-                style={{ display: state.successMessage ? "block" : "none" }}
+                style={{ display: state.successMessage ? "inline-block": "none" }}
                 role="alert">
                 {state.successMessage}
+              </div>
+              <div
+                className="alert alert-danger "
+                style={{ display: state.errorMessage ? "inline-block": "none" }}
+                role="alert">
+                {state.errorMessage}
               </div>
             </form>
           </div>

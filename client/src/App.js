@@ -31,7 +31,7 @@ function App() {
     setLogged(!logged)
   }
   const getuser = () => {
-    const user = JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(sessionStorage.getItem("user"))
     setLogged(!!user)
   }
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
             <LoginForm showError={updateErrorMessage} updateTitle={updateTitle} />
           </Route>
           <Route exact path="/alljournals">
-            <AllJournals fn={toggle} />
+            <AllJournals fn={ getuser } />
           </Route>
           <Route exact path="/quotes/:id"><Quotes /></Route>
           <Route exact path="/about"><About /></Route>

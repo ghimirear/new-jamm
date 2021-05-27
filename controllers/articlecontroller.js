@@ -23,7 +23,8 @@ const createArticle =  (req, res)=>{
     try {
         const result = Article.create({
             title : req.body.title,
-            body:req.body.body
+            body:req.body.body,
+            journal:[req.body.journalId]
         })
         .then(({ _id }) => Journal.findOneAndUpdate({_id:req.body.journalId}, { $push: { articles: _id } }, { new: true }))
         .then()
@@ -40,7 +41,18 @@ const updateArticle =  (req, res)=>{
 const deleteArticle =  (req, res)=>{
     console.log(req.params.id);
     console.log(req.headers.journalid);
-    const journalId = req.headers.journalid;
+    let journalId;
+    Article.findOne({_id:req.params.id}, (err, result)=>{
+        if(err){
+            console.log(error)
+        }
+        console.log( "result of fthe request"+ result.journal)
+       let journal = result.journal;
+        for (let i = 0; i < journal.length; i++) {
+            journalId = journal[0];
+            
+        }
+    })
     try {
      const result = Article.findOneAndDelete({_id:req.params.id}, (err, result)=>{
          if(err){
@@ -56,7 +68,7 @@ const deleteArticle =  (req, res)=>{
        .then( res.json(result))
         
     } catch (error) {
-        
+        console.log(error);
     }
    
    
