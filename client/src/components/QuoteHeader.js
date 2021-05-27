@@ -2,6 +2,8 @@ import React from "react";
 import FadeIn from "react-fade-in";
 import quotes from "../quotes.json";
 import axios from "axios";
+import decode from "jwt-decode";
+import apiConstant from "../constants/apiContants.js";
 import "../index.css";
 import Modal from "./Modal.js";
 
@@ -11,20 +13,8 @@ function QuoteHeader() {
 
   // save quote to database
   const addQuote = (e) => {
-    const apiUrl = "/quote/";
-    const user = JSON.parse(localStorage.getItem("user"));
-    const authAxios = axios.create({
-      baseURL: apiUrl,
-      headers: {
-        Authorization: `Bearer ${user.token} `,
-        userId: user.id,
-      },
-    });
-    const quote = { quote: navQuote };
-    authAxios
-      .post("create", quote)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+   const quote = { quote: navQuote };
+   apiConstant.createQuote(quote).then(res=>console.log(res)).catch(error=> console.log(error))
   };
 
   return (

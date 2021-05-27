@@ -1,98 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import apiConstant from "../constants/apiContants.js";
 import "./allpages.css";
 
 function SavedQuotes() {
-  const [state, setState] = useState({
-    userId: "",
-    token: "",
-    results: []
-  });
-  const id = useParams()
+  //const [state, setState] = useState({});
+  const [results, setResults]= useState([])
+  // const id = useParams()
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setState({
+    getQuotes();
 
-        userId: user.id,
-        token: user.token,
-        name: user.name,
-      })
-      const apiUrl = "/quote/"
-      const authAxios = axios.create({
-        baseURL: apiUrl,
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          userId: user.id
-        }
-      })
-      console.log(id.id)
-      authAxios.get(`get/${id.id}`)
-        .then((result) => {
-          if (result.data) {
-            setState(prevState => ({
-              ...prevState,
-              results: result.data
-            }))
-          }
-        });
-
-      //.catch(error => console.log(error))  
-    };
-
-  }, [])
+  }, [results])
 
   const getQuotes = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setState(prevState => ({
-      ...prevState,
-      userId: user.id,
-      token: user.token,
-      name: user.name,
-    }))
-    const apiUrl = "/quote/"
-    const authAxios = axios.create({
-      baseURL: apiUrl,
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        userId: user.id
-      }
-    })
-    authAxios.get(`get/${id.id}`)
-      .then(result => {
-        console.log(result.data);
-        if (result.data) {
-          setState(prevState => ({
-            ...prevState,
-            results: result.data
-          }))
-        }
-
-      })
-      .catch(error => console.log(error))
+    apiConstant.getQuote().then((res)=>{
+      setResults(res.data)
+    }).catch(error=> console.log(error))
   };
 
   const deleteQuote = (e) => {
     const delid = e.target.getAttribute('id');
-    console.log(delid);
-    const apiUrl = "/quote/"
-    const authAxios = axios.create({
-      baseURL: apiUrl,
-      headers: {
-        Authorization: `Bearer ${state.token} `,
-        userId: state.userId,
-      }
-    })
-    authAxios.delete(`delete/${delid}`)
-      .then(res => {
-        console.log(res)
-        if (res.status === 200) {
-          getQuotes();
-        }
-      }
-      )
-      .catch(error => console.log(error));
+    apiConstant.deleteQuote(delid).then(res=> console.log(res),
+    getQuotes()
+    ).catch(error=> console.log(error))
   }
 
 
@@ -131,10 +60,10 @@ function SavedQuotes() {
             </tr>
           </thead>
 
-          {state.results ? (
+          {results ? (
             <tbody>
               {
-                state.results.map(result => (
+                results.map(result => (
                   <tr key={result._id}>
                     <td className="quote-text text-left">{result.name}</td>
                     <td>

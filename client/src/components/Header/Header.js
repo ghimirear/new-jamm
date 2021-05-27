@@ -7,7 +7,7 @@ import "./header.css";
 
 const Header = () => {
     const [user, setuser] = useState([]);
-    const NewUser = JSON.parse(localStorage.getItem("user"));
+    const NewUser = JSON.parse(sessionStorage.getItem("user"));
     useEffect(() => {
         if (NewUser) {
             setuser(prevState => ({
@@ -19,12 +19,13 @@ const Header = () => {
         }
     }, []);
     const logout = () => {
-        localStorage.clear();
+        sessionStorage.clear();
         window.location.pathname = "/login";
     }
     const token = NewUser?.token;
     if (token) {
         const decodedToken = decode(token);
+        console.log(decodedToken);
         if (decodedToken.exp * 1000 < new Date().getTime()) {
             logout();
         }
