@@ -1,34 +1,39 @@
 import axios from "axios";
 import decode from "jwt-decode";
-//export const API_BASE_URL = 'http://localhost:3001/api/';
-// make all the function to get post update and delete for each and every one and then call from separate file 
-// const user = JSON.parse(sessionStorage.getItem("user"));
-// const token = user?.token;
+// defining logout function
 const logout = () => {
     sessionStorage.clear();
-    window.location.pathname = "/login";
+    
 }
 let decodedToken;
 let authAxios;
+let user;
 const apiUrl = "/";
+// check in session storage if there is user ro not
 const getUser =()=>{
-    const user = JSON.parse(sessionStorage.getItem("user")); 
-    decodedToken = decode(user.token);
+     user = JSON.parse(sessionStorage.getItem("user")); 
+    
     if (user) {
-        
+        decodedToken = decode(user.token);
         if (decodedToken.exp * 1000 < new Date().getTime()) {
+            // if token expires logout and return
             logout();
             return
         }
+        authAxios = axios.create({
+            baseURL: apiUrl,
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              userId: decodedToken.id,
+            },
+       })
     }
-     
-    authAxios = axios.create({
-     baseURL: apiUrl,
-     headers: {
-       Authorization: `Bearer ${user.token}`,
-       userId: decodedToken.id,
-     },
-})}
+     else if(!user){
+         // if user is not login and try to hit the other route redirect them to login.
+        window.location.pathname = "/login";
+         return
+     }
+  }
 
 
 
@@ -79,5 +84,5 @@ export default{
         return authAxios.get(`quote/get/${decodedToken.id}`)
     },
 
-
+    
 }
