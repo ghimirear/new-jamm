@@ -20,33 +20,7 @@ const userSchema = new Schema({
     type:String,
     required: true,
   },
-  thems:[
-    {books:{
-      type:Boolean,
-      default:false,
-      }},
-    
-    {swirl:{
-      type:Boolean,
-      default:false,
-      }
-    },
-    {half:{
-      type:Boolean,
-      default:false,
-      }
-    },
-    {blue:{
-      type:Boolean,
-      default:false,
-      }
-    },
-    {mosiac:{
-      type:Boolean,
-      default:false,
-      }
-    },
-  ],
+  theme:{type:String, default:null},
  // DOB: {type:Date, required:true},
    DarkTheme: {type :Boolean, default: false},
   journals:[{ type:Schema.Types.ObjectId, ref :"Journal"}],

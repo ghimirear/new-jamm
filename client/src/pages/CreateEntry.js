@@ -21,7 +21,7 @@ function CreateEntry() {
             console.log("undefined");
             return
         }
-        console.log(formObject.title);
+       // console.log(formObject.title);
       const article =  {
         title:formObject.title, 
         body:formObject.body, 

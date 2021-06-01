@@ -3,20 +3,19 @@ import apiConstant from "../constants/apiContants.js";
 import "./allpages.css";
 
 function SavedQuotes() {
-  //const [state, setState] = useState({});
   const [results, setResults]= useState([])
-  // const id = useParams()
+ // useEffect
   useEffect(() => {
     getQuotes();
 
   }, [results])
-
+// get all the saved quotes
   const getQuotes = () => {
     apiConstant.getQuote().then((res)=>{
       setResults(res.data)
     }).catch(error=> console.log(error))
   };
-
+// delete saved quote.
   const deleteQuote = (e) => {
     const delid = e.target.getAttribute('id');
     apiConstant.deleteQuote(delid).then(res=> console.log(res),
