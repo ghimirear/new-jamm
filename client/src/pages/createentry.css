@@ -74,6 +74,19 @@ textarea.form-control:focus {
     background-color: #fff9f6;  
     border-bottom: none;
  }
+.card-card{
+    width: 80%;
+    margin-left: 20px;
+    margin-top: 10px;
+    height: 70vh;
+    opacity: 0.9;
+    background:whitesmoke;
+    overflow-y: scroll;
+    background-color: linear-gradient(blue, yellow);
+    
+    
+}
 
-
-
+::-webkit-scrollbar{
+    display: none;
+}
