@@ -14,7 +14,15 @@ const articleSchema = new Schema({
     type: Date,
     default: () => Date.now()
   },
-  // each article belong to one user and one Journal so it is not an array
+  image:{
+    name: String,
+    desc: String,
+    data: Buffer,
+    contentType: String,
+
+  },
+  // each article belong to one user and one Journal 
+  image:[{type:Schema.Types.ObjectId, ref:"Image"}],
   user: [{ type: Schema.Types.ObjectId, ref: "User" }],
   journal: [{ type: Schema.Types.ObjectId, ref: "Journal" }]
 });

@@ -1,8 +1,8 @@
 import React from "react";
 import FadeIn from "react-fade-in";
 import quotes from "../quotes.json";
-import axios from "axios";
-import decode from "jwt-decode";
+//import axios from "axios";
+//import decode from "jwt-decode";
 import apiConstant from "../constants/apiContants.js";
 import "../index.css";
 import Modal from "./Modal.js";
