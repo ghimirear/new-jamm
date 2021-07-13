@@ -22,7 +22,7 @@ function AllJournals(props) {
   useEffect(() => {
     getJournal()
     
-  }, [journals]) 
+  }, []) 
   // handing input change
  function handleChange(e){
     const { name, value } = e.target;
@@ -91,7 +91,7 @@ function AllJournals(props) {
         {journals.length ? (
           <div className="container-fluid card-container d-flex flex-wrap justify-content-center">
             {journals.map((result) => (
-              <div className="card card-journal border-0">
+              <div className="card card-journal border-0" key={result._id}>
                 {/* <CardJournal> */}
                 <div className="card-body vl card-body-journal d-flex flex-wrap justify-content-center align-items-center">
                   <div>
@@ -109,7 +109,7 @@ function AllJournals(props) {
                       <hr />
                       <p className="card-text card-text-journal">
                         <Link to={"/create/" + result._id}>
-                          <a
+                          <a href={result._id}
                             className="text-capitalize text-center"
                             
                             id={result._id}

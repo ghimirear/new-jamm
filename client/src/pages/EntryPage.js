@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
-import Entry from '../components/Entry';
+//import Entry from '../components/Entry';
 import Wrapper from "../components/Wrapper";
 // import SideNav from '../components/SideNav';
 // import './style.css';
-import Modal from "../components/Modal"
+//import Modal from "../components/Modal"
 
 import user from '../user.json';
 

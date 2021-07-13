@@ -2,19 +2,23 @@
 const Journal = require ('../models/Journal');
 const Article = require ("../models/Article");
 
+
 // get route 
 const getArticle = (req, res)=>{
     console.log(req.params.id);
-    try {
-        Journal.findOne({_id:req.params.id}).populate("articles")
-        .then(dbArticle=>{
-            console.log(dbArticle)
-            res.json(dbArticle);
-        }) 
-    } catch (error) {
-        console.log(error)
-     }
-
+    
+    // try {
+    //     Journal.findOne({_id:req.params.id}).populate("articles")
+    //     .then(dbArticle=>{
+    //         console.log(dbArticle)
+    //         res.json(dbArticle);
+    //     }) 
+    // } catch (error) {
+    //     console.log(error)
+    //  }
+     Article.find({journal:{$in:[req.params.id]}}).populate("image")
+     .then(dbArticles =>res.json(dbArticles) )
+     .catch(err => res.json(err));
 }
 // post or creating journal
 const createArticle =  (req, res)=>{
@@ -35,8 +39,26 @@ const createArticle =  (req, res)=>{
    
 }
 const updateArticle =  (req, res)=>{
-    console.log(req.body);
-   
+    upload.single('image', (req, res, next)=>{
+        var obj = {
+            name: req.body.name,
+            desc: req.body.desc,
+            img: {
+                data: fs.readFileSync(path.join(__dirname + '/client/public/uploads/' + req.file.filename)),
+                contentType: 'image/png'
+            }
+        }
+        Article.findByIdAndUpdate({_id:req.body.articleId}, obj, (err, res)=>{
+            if (err) {
+                console.log(err);
+            }
+            console.log(res)
+        })
+    })
+  
+}
+const uploadImage = (req, res)=>{
+    console.log(req.body)
 }
 const deleteArticle =  (req, res)=>{
     console.log(req.params.id);
@@ -70,7 +92,8 @@ const deleteArticle =  (req, res)=>{
     } catch (error) {
         console.log(error);
     }
+
    
    
 }
-module.exports={getArticle, createArticle, updateArticle, deleteArticle};
+module.exports={getArticle, createArticle, updateArticle, deleteArticle, uploadImage};

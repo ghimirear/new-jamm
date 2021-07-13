@@ -13,7 +13,7 @@ const About = () => {
             container
             spacing={3}
             direction="row"
-            alignItems="center"
+            // alignItems="center"
             justify="center"
             alignItems="stretch"
             style={{

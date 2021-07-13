@@ -1,4 +1,4 @@
-import Purple from "./images/purple.png";
+//import Purple from "./images/purple.png";
 import Blue from "./images/blue.jpg";
 import Mosaic from "./images/mosaic.jpg";
 import Swirl from "./images/swirl.jpg"
@@ -81,7 +81,7 @@ const themes = {
     // }, 
 
 
-    Books: {
+    books: {
         'background-image': `url(${Books})`,
         "color": "navy",
         'font-family': "'Courier New', Courier, monospace"

@@ -1,4 +1,5 @@
 // requiring required files
+const Article = require('../models/Article');
 const Journal = require ('../models/Journal');
 const User = require ("../models/User");
 
@@ -47,6 +48,9 @@ const updateJournal =  (req, res)=>{
     console.log(req.body);
    
 }
+const uploadImage = (req, res)=>{
+    console.log(req.body)
+}
 const deleteJournal =  (req, res)=>{
     // console.log(req.params.id);
     const userId = req.headers.userid;
@@ -62,7 +66,12 @@ const deleteJournal =  (req, res)=>{
            console.log(res)
         })
     })
-   // res.json(journal);
+   Article.deleteMany({journal:{$in:[req.params.id]}}, (err, res)=>{
+       if(err){
+           console.log(err)
+       }
+       console.log(res)
+   })
    
 }
-module.exports={getJournal, createJournal, updateJournal, deleteJournal};
+module.exports={getJournal, createJournal, updateJournal, deleteJournal, uploadImage};

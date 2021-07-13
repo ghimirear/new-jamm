@@ -18,7 +18,7 @@ import About from "./pages/About";
 import AllEntries from "./pages/AllEntries";
 import EntryPage from "./pages/EntryPage";
 import CreateEntry from "./pages/CreateEntry";
-
+import Upload from "./pages/Upload"
 import QuoteHeader from "./components/QuoteHeader";
 import "bootstrap/js/src/collapse.js";
 import Footer from "./components/Footer/footer";
@@ -58,6 +58,7 @@ function App() {
           <Route exact path="/entrypage"> <EntryPage /></Route>
           <Route exact path="/create/:id"><CreateEntry /> </Route>
           <Route exact path="/books/:id"><AllEntries fn={toggle} /> </Route>
+          <Route exact path ="/upload/:id">< Upload /> </Route>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage} />
         </Switch>
         {logged ? <Footer /> : null}

@@ -12,6 +12,7 @@ function SavedQuotes() {
 // get all the saved quotes
   const getQuotes = () => {
     apiConstant.getQuote().then((res)=>{
+     // console.log(res.data);
       setResults(res.data)
     }).catch(error=> console.log(error))
   };

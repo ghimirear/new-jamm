@@ -82,11 +82,15 @@ textarea.form-control:focus {
     opacity: 0.9;
     background:whitesmoke;
     overflow-y: scroll;
-    background-color: linear-gradient(blue, yellow);
+    background-color: linear-gradient(rgb(45, 45, 197), rgb(71, 71, 29));
     
     
 }
 
 ::-webkit-scrollbar{
     display: none;
+}
+.save-button{
+    left: 0;
+
 }

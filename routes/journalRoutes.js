@@ -1,8 +1,9 @@
 const express = require('express')
-const { getJournal, createJournal, updateJournal, deleteJournal } = require( "../controllers/journalcontroller")
+const { getJournal, createJournal, updateJournal, deleteJournal, uploadImage } = require( "../controllers/journalcontroller")
 const router = express.Router();
 router.get("/journal/:id", getJournal);
 router.delete("/journal/:id", deleteJournal);
 router.post("/journal", createJournal);
-router.put("/user/journal/:id", updateJournal)
+router.put("/journal/:id", updateJournal)
+//  router.put("/journal/upload:id", uploadImage);
 module.exports= router;
