@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import Message from '../components/Message';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
 
 const FileUpload = () => {
   const [file, setFile] = useState('');
@@ -31,6 +31,7 @@ const FileUpload = () => {
       });
       console.log(res);
       setMessage('File Uploaded');
+      toast.success(`Image ${filename} is uploaded`)
     } catch (err) {
       if (err.response.status === 500) {
         setMessage('There was a problem with the server');

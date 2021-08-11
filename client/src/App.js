@@ -22,6 +22,8 @@ import Upload from "./pages/Upload"
 import QuoteHeader from "./components/QuoteHeader";
 import "bootstrap/js/src/collapse.js";
 import Footer from "./components/Footer/footer";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -62,6 +64,7 @@ function App() {
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage} />
         </Switch>
         {logged ? <Footer /> : null}
+        <ToastContainer style={{zIndex:9999999999999}}/>
       </div>
     </Router>
 

@@ -4,6 +4,7 @@ import "./LoginForm.css";
 
 import { withRouter } from "react-router-dom";
 import Logo from "../Logo/logo";
+import { toast } from 'react-toastify';
 
 function LoginForm(props) {
   const [state, setState] = useState({
@@ -28,7 +29,8 @@ function LoginForm(props) {
     };
     axios
       .post("/api/signin", payload)
-      .then(function (response) {
+      .then((response)=> {
+          console.log(response.message)
         if (response.status === 200) {
           const user = {
             token: response.data.token,
@@ -37,22 +39,31 @@ function LoginForm(props) {
           setState((prevState) => ({
             ...prevState,
             successMessage: "Login successful. Redirecting to home page..",
+            
           }));
+         
           redirectToHome();
           props.showError(null);
-        } else if (response.status === 400) {
-          console.log("bad request");
-          setState("Email or password do not match");
-        } else {
-          setState("this email is not registered");
-        }
+          toast.success(`Sucessfully logged in.`)
+        } 
+        
       })
-      .catch(function (error) {
-        //console.log(error)
+      .catch(error => {
+        if(error.message === "Request failed with status code 404"){
+          toast.error(`${state.email}  is not register`);
+        }
+        else if (error.message ==="Request failed with status code 400" ){
+          toast.error("email or password is incorrect");
+        }
+        else if (error.message ==="Request failed with status code 500" ){
+          toast.error("Something went wrong");
+        }
+        // console.log(error.message)
         setState((prevState) => ({
           ...prevState,
-          errorMessage: "This email ios not registered. Please register", 
+          errorMessage: `${error.message}`, 
         }));
+        // toast.error(`${error}`)
       });
   };
   const redirectToHome = () => {

@@ -6,7 +6,7 @@ import quotes from "../quotes.json";
 import apiConstant from "../constants/apiContants.js";
 import "../index.css";
 import Modal from "./Modal.js";
-
+import { toast } from 'react-toastify';
 function QuoteHeader() {
   const quote = quotes[Math.floor(Math.random() * quotes.length)];
   const navQuote = `${quote.q} ~ ${quote.a}`;
@@ -14,7 +14,15 @@ function QuoteHeader() {
   // save quote to database
   const addQuote = (e) => {
    const quote = { quote: navQuote };
-   apiConstant.createQuote(quote).then(res=>console.log(res)).catch(error=> console.log(error))
+   apiConstant.createQuote(quote).then(res=>
+    
+    console.log(res),
+    toast.success("quote is added to the database")
+   
+   ).catch(error => 
+    // console.log(error),
+    toast.error("something went wrong!!")
+    )
   };
 
   return (

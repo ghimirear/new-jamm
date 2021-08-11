@@ -4,7 +4,7 @@ import "./RegistrationForm.css";
 
 import { withRouter } from "react-router-dom";
 import Logo from "../Logo/logo";
-
+import { toast } from 'react-toastify';
 
 function RegistrationForm(props) {
   const [state, setState] = useState({
@@ -25,6 +25,7 @@ function RegistrationForm(props) {
   };
   const sendDetailsToServer = () => {
     if (state.password.length < 8 || state.confirmPassword.length < 8) {
+      toast.error("Password must be 8 characters or long")
       setState((prevState) => ({
         ...prevState,
         errorMessage:
@@ -34,6 +35,7 @@ function RegistrationForm(props) {
       return;
     }
     if (!!state.email.includes("/^[^\s@]+@[^\s@]+$/")) {
+      toast.error("Please enter a valid email")
       setState((prevState) => ({
         ...prevState,
         errorMessage:
@@ -43,6 +45,7 @@ function RegistrationForm(props) {
       return;
     }
     if (state.firstName==="" || state.lastName==="") {
+      toast.error("Please enter your full  name");
       setState((prevState) => ({
         ...prevState,
         errorMessage:
@@ -65,7 +68,7 @@ function RegistrationForm(props) {
       axios
         .post("/api/signup", payload)
         .then(function (response) {
-          console.log(response);
+         // console.log(response);
           if (response.status === 200) {
             const user = {
               token: response.data.token,
@@ -79,35 +82,29 @@ function RegistrationForm(props) {
             }));
             redirectToHome();
             props.showError(null);
-          } else if (response.status === 400) {
-            setState((prevState) => ({
-              ...prevState,
-              errorMessage:
-                "This email is already registered",
-            }));
-          }
-          else if(response.status===404){
-            setState((prevState) => ({
-              ...prevState,
-              errorMessage:
-                "you are not registered.",
-            }));
+            toast.sucess(`${state.firstName} you are registered congratulations`)
           }
         })
         .catch(function (error) {
+
+
+          if(error.message === "Request failed with status code 400"){
+            toast.error(`${state.email}  is already registered..`);
+          }
+         else if (error.message ==="Request failed with status code 401" ){
+            toast.error(" Password is incorrect");
+          }
+          else if (error.message ==="Request failed with status code 500" ){
+            toast.error("Something went wrong");
+          }
           setState((prevState) => ({
             ...prevState,
             errorMessage:
               "this email is already registered!!",
           }));
+          // toast.error(`${error.message}`)
         });
-    } else {
-      setState((prevState) => ({
-        ...prevState,
-        errorMessage:
-          "this email is already registered!!",
-      }));
-    }
+    } 
   };
   const redirectToHome = () => {
     props.updateTitle("Home");

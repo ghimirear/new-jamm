@@ -3,19 +3,20 @@ import { useParams, Link,  } from 'react-router-dom';
 import apiConstant from "../constants/apiContants.js";
 import Wrapper from '../components/Wrapper/wrapper.js';
 import DOMPurify from 'dompurify';
+import { toast } from 'react-toastify';
 // import Table from '../components/Table/table';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./allpages.css";
 
 function AllEntries(props) {
   const [results, setResults]= useState([])
-
+  const [deletingId, setDeletingId]= useState(null)
 
   // get all entries belongs to partivcular journal.
 
   useEffect(() => {
-    getEntries()
-  }, [results]);
+    getEntries();
+  }, [deletingId]);
 
 
   // journal id 
@@ -32,10 +33,13 @@ function AllEntries(props) {
   // to delete the article
   const deleteEntry = (e) => {
     const delid = e.target.getAttribute('id');
+    setDeletingId(delid)
    
     apiConstant.deleteArticle(delid).then(res=>console.log(res),
     getEntries()
-    ).catch(error => console.log(error))
+    ).catch(error => // console.log(error),
+    toast.error(error.msg)
+    )
   };
 
 

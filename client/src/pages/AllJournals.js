@@ -4,25 +4,19 @@ import apiConstant from "../constants/apiContants.js";
 import { Link } from "react-router-dom";
 import "./alljournals.css"; 
 import "./allpages.css";
+import { toast } from 'react-toastify';
 
 function AllJournals(props) {
  const [journals, setJournals]= useState([])
    const [formObject, setFormObject]= useState({})
   // function to delete journal
   props.fn()
-  function deleteJournal(e){
-    // console.log(e.target)
-    const delid = e.target.getAttribute('id');
-     apiConstant.deleteJournal(delid).then((res)=>{
-       console.log(res);
-       getJournal()
-     }).catch(err=> console.log(err))
-  }
+  
   // on page load.
   useEffect(() => {
-    getJournal()
+    getJournal();
     
-  }, []) 
+  }, [journals]) 
   // handing input change
  function handleChange(e){
     const { name, value } = e.target;
@@ -38,17 +32,36 @@ function AllJournals(props) {
     })
   };
   // function to create new journal
- function addJournal (e){
+ async function addJournal  (e){
     e.preventDefault();
     if(formObject.journalName){
-    apiConstant.createJournal({journalName:formObject.journalName})
+    await  apiConstant.createJournal({journalName:formObject.journalName})
     .then((res)=>{
+      toast.success(`Journal ${ formObject.journalName} is added sucessfully`)
     getJournal();
-    }).catch(err=>{
-      console.log(err);
+    }).catch(error=>{
+      if (error){toast.error("Something went wrong!!");}
+      
+      console.log(error);
     })
     clearInput();}
   };
+  function deleteJournal(e){
+
+    const delid = e.target.getAttribute('id');
+
+      apiConstant.deleteJournal(delid).then(res=>{
+        toast.success(`${delid} Jounal is deleted sucessfully`);
+      
+    }).catch(error =>{
+      console.log(error)
+     // toast.error("Something went wrong")
+    })
+        
+        
+     
+     
+  }
 
   
     return (
