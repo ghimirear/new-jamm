@@ -5,24 +5,13 @@ const Article = require ("../models/Article");
 
 // get route 
 const getArticle = (req, res)=>{
-    console.log(req.params.id);
-    
-    // try {
-    //     Journal.findOne({_id:req.params.id}).populate("articles")
-    //     .then(dbArticle=>{
-    //         console.log(dbArticle)
-    //         res.json(dbArticle);
-    //     }) 
-    // } catch (error) {
-    //     console.log(error)
-    //  }
      Article.find({journal:{$in:[req.params.id]}}).populate("image")
      .then(dbArticles =>res.json(dbArticles) )
      .catch(err => res.json(err));
 }
 // post or creating journal
 const createArticle =  (req, res)=>{
-    console.log(req.body);
+    // console.log(req.body);
     if(req.body.journalId === undefined) return res.status(500).json({message:"please specify the journal you want to put"});
     try {
         const result = Article.create({

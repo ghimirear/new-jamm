@@ -9,7 +9,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
+import { toast } from 'react-toastify';
 
 let today = new Date().toDateString();
 
@@ -22,7 +22,7 @@ function CreateEntry() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormObject({...formObject, [name]:value})
-        console.log( convertToHTML( editorState.getCurrentContent()));
+       // console.log( convertToHTML( editorState.getCurrentContent()));
     }
     
     //const [contentState, setContentState] = useState(raw)
@@ -43,7 +43,10 @@ function CreateEntry() {
         journalId:id
     }
        apiContants.createArticle(article)
-       .then(res=> console.log(res),
+       .then(res=> 
+        console.log(res),
+        toast.success(`Article ${formObject.title } is added sucessfully`)
+        
        ).catch(error => console.log(error))
     };
  

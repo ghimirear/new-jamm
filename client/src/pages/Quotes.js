@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import apiConstant from "../constants/apiContants.js";
 import "./allpages.css";
+import { toast } from 'react-toastify';
 
 function SavedQuotes() {
   const [results, setResults]= useState([])
@@ -20,8 +21,11 @@ function SavedQuotes() {
   const deleteQuote = (e) => {
     const delid = e.target.getAttribute('id');
     apiConstant.deleteQuote(delid).then(res=> console.log(res),
+    toast.success("quote is deleted sucessfully"),
     getQuotes()
-    ).catch(error=> console.log(error))
+    ).catch(error=> console.log(error),
+    toast.error("Something went wrong")
+    )
   }
 
 
